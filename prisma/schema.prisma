@@ -15,11 +15,11 @@ model User {
   city     String?
   password String
   status   Boolean
-  posts    Post[]
+  posts    Posts[]
   comments Comment[]
 }
 
-model Post {
+model Posts {
   id        Int       @id @default(autoincrement())
   title     String
   content   String?
@@ -35,6 +35,6 @@ model Comment {
   published Boolean? @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
-  Post      Post?    @relation(fields: [postId], references: [id])
+  Post      Posts?    @relation(fields: [postId], references: [id])
   postId    Int?
 }
