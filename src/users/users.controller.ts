@@ -9,9 +9,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
 
-import { CreateUserDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
+import { UpdateUserDto } from './dto';
 
 @Controller('users')
 export class UsersController {
@@ -19,34 +20,30 @@ export class UsersController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  getAll(): CreateUserDto[] {
+  getAll() {
     return this.userService.getAll();
   }
 
   @Get('/:id')
-  getUserById(@Param('id') id: string): CreateUserDto {
+  getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  createUser(@Body() user: CreateUserDto): CreateUserDto {
+  createUser(@Body() user: User) {
     return this.userService.createUser(user);
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete('/:id')
-  deleteUser(@Param('id') id: string): string {
-    this.userService.deleteUserByID(id);
-    return `user with id ${id} was deleted`;
+  deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUserByID(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Put('/:id')
-  updateUserById(
-    @Body() user: Partial<CreateUserDto>,
-    @Param('id') id: string,
-  ): CreateUserDto {
+  updateUserById(@Body() user: UpdateUserDto, @Param('id') id: string) {
     return this.userService.updateUser(user, id);
   }
 }
