@@ -1,32 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { Posts, Prisma } from '@prisma/client';
 
-import { CreatePostsDto } from './dto/create-posts-dto';
+import { PrismaService } from '../core';
 
 @Injectable()
 export class PostsService {
-  private posts = [];
+  constructor(private prismaService: PrismaService) {}
 
-  getAllPosts(): CreatePostsDto[] {
-    return this.posts;
+  getAllPosts(): Promise<Posts[]> {
+    return this.prismaService.posts.findMany();
   }
 
-  getPostById(id: string): CreatePostsDto {
-    return this.posts.find((value) => value.id == id);
+  getPostById(id: string): Promise<Posts> {
+    return this.prismaService.posts.findUnique({ where: { id: Number(id) } });
   }
 
-  createPost(post: CreatePostsDto): CreatePostsDto {
-    const createdPost = { ...post, id: new Date().valueOf() };
-    this.posts.push(createdPost);
-    return createdPost;
+  createPost(post: Prisma.PostsCreateInput): Promise<Posts> {
+    return this.prismaService.posts.create({ data: post });
   }
 
-  updatePostById(post: Partial<CreatePostsDto>, id: string): CreatePostsDto {
-    const find = this.posts.find((value) => value.id == id);
-    return Object.assign(find, post);
+  updatePostById(post: Prisma.PostsUpdateInput, id: string): Promise<Posts> {
+    return this.prismaService.posts.update({
+      where: { id: Number(id) },
+      data: post,
+    });
   }
 
-  deletePostById(id: string): void {
-    const index = this.posts.findIndex((value) => value.id == id);
-    this.posts.splice(index, 1);
+  deletePostById(id: string): Promise<Posts> {
+    return this.prismaService.posts.delete({ where: { id: Number(id) } });
   }
 }
