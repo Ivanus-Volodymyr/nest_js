@@ -8,6 +8,7 @@ import {
   Length,
 } from 'class-validator';
 import { CommentCreateDto } from '../../comments/dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsNumber()
@@ -16,6 +17,7 @@ export class CreateUserDto {
   @IsString()
   @Length(2, 10)
   @IsNotEmpty()
+  @ApiProperty({ example: 'username' })
   public name: string;
   @IsString()
   @IsEmail()
