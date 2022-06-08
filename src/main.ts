@@ -9,8 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Ivanus Nest.jd')
-    .setDescription('The users API description')
+    .setTitle('Ivanus Nest.js')
+    .setDescription('The nest API description')
     .setVersion('1.0')
     .addTag('users')
     .build();
