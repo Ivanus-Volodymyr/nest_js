@@ -8,6 +8,8 @@ import {
   Param,
   Post,
   Put,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 
@@ -21,6 +23,9 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { AuthGuard } from '../auth/guards/jwt-auth-guard';
+import { RequestExtended } from '../auth/request/request-extended';
 
 @ApiTags('Users')
 @Controller('users')
@@ -69,6 +74,7 @@ export class UsersController {
     },
   })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   @Get()
   getAll() {
     return this.userService.getAll();
@@ -138,7 +144,7 @@ export class UsersController {
   })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  createUser(@Body() user: User) {
+  createUser(@Req() req: RequestExtended, @Body() user: User) {
     return this.userService.createUser(user);
   }
 
