@@ -7,13 +7,11 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { CommentCreateDto } from '../../comments/dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
-  @IsNumber()
-  id: number;
+import { CommentCreateDto } from '../../comments/dto';
 
+export class CreateUserDto {
   @IsString()
   @Length(2, 10)
   @IsNotEmpty()
