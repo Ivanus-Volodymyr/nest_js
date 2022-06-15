@@ -15,6 +15,7 @@ model User {
   city     String?
   password String
   status   Boolean
+  avatar   String?
   posts    Posts[]
   comments Comment[]
 }
@@ -35,6 +36,11 @@ model Comment {
   published Boolean? @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
-  Post      Posts?    @relation(fields: [postId], references: [id])
+  Post      Posts?   @relation(fields: [postId], references: [id])
   postId    Int?
 }
+
+// prisma format  // check
+// npx prisma generate // синхронізація схеми з базою
+// npx prisma migrate dev --name change_post_table --create-only  // add new column to db
+// npx prisma migrate dev --name init
