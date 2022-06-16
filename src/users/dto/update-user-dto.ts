@@ -1,12 +1,15 @@
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
   @Length(2, 10)
   @IsNotEmpty()
   public name: string;
-  @IsNumber()
-  public age: number;
+  @IsString()
+  public age: string;
   @IsString()
   public city: string;
+  @IsString()
+  @IsOptional()
+  readonly avatar: Express.Request['file'];
 }

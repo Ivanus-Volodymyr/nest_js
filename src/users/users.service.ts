@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../core';
-import { Prisma, User } from '@prisma/client';
-import { CreateUserDto } from './dto';
+import { User } from '@prisma/client';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private fileService: FileService,
+  ) {}
 
   getAll(): Promise<User[]> {
     return this.prismaService.user.findMany({
@@ -30,10 +34,15 @@ export class UsersService {
     return this.prismaService.user.delete({ where: { id: Number(id) } });
   }
 
-  updateUser(user: Prisma.UserUpdateInput, id: string): Promise<User> {
+  async updateUser(
+    file: object,
+    user: UpdateUserDto,
+    id: string,
+  ): Promise<User> {
+    const data = await this.fileService.uploadFile(file);
     return this.prismaService.user.update({
       where: { id: Number(id) },
-      data: user,
+      data: { ...user, age: Number(user.age), avatar: data.Location },
     });
   }
 }

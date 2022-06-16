@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   Length,
 } from 'class-validator';
@@ -36,9 +35,6 @@ export class CreateUserDto {
   @Length(2, 20)
   @IsNotEmpty()
   readonly password: string;
-
-  @IsOptional()
-  readonly avatar: string;
   public posts?: CreatePostsDto[];
   public comments?: CommentCreateDto[];
 }

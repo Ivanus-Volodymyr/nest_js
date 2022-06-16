@@ -9,7 +9,9 @@ import {
   Post,
   Put,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 
@@ -26,6 +28,7 @@ import {
 
 import { AuthGuard } from '../auth/guards/jwt-auth-guard';
 import { RequestExtended } from '../auth/request/request-extended';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
 @Controller('users')
@@ -183,9 +186,14 @@ export class UsersController {
     },
   })
   @HttpCode(HttpStatus.OK)
-  @Put('/:id')
-  updateUserById(@Body() user: UpdateUserDto, @Param('id') id: string) {
-    return this.userService.updateUser(user, id);
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('avatar'))
+  updateUserById(
+    @UploadedFile() file,
+    @Body() user: UpdateUserDto,
+    @Param('id') id: string,
+  ) {
+    return this.userService.updateUser(file, user, id);
   }
 
   @ApiOperation({ summary: 'Delete user by id' })
